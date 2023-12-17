@@ -42,12 +42,16 @@ public class PetValidator implements Validator {
 			errors.rejectValue("name", REQUIRED, REQUIRED);
 		}
 
+		validatePetType(errors, pet);
+
+		validateBirthDate(errors, pet);
+	}
+
+	private static void validatePetType(final Errors errors, final Pet pet) {
 		// type validation
 		if (pet.isNew() && pet.getType() == null) {
 			errors.rejectValue("type", REQUIRED, REQUIRED);
 		}
-
-		validateBirthDate(errors, pet);
 	}
 
 	private static void validateBirthDate(final Errors errors, final Pet pet) {
