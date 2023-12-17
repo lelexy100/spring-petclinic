@@ -47,6 +47,10 @@ public class PetValidator implements Validator {
 			errors.rejectValue("type", REQUIRED, REQUIRED);
 		}
 
+		validateBirthDate(errors, pet);
+	}
+
+	private static void validateBirthDate(final Errors errors, final Pet pet) {
 		// birth date validation
 		if (pet.getBirthDate() == null) {
 			errors.rejectValue("birthDate", REQUIRED, REQUIRED);
