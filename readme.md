@@ -1,162 +1,193 @@
-# Spring PetClinic Sample Application [![Build Status](https://github.com/spring-projects/spring-petclinic/actions/workflows/maven-build.yml/badge.svg)](https://github.com/spring-projects/spring-petclinic/actions/workflows/maven-build.yml)
+# Spring PetClinic Sample Application
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/spring-projects/spring-petclinic) [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=7517918)
+This project is used as part of the Java Department Meeting #3 Workshop!
+The workshop showcases IntelliJ capabilities & aims at improving this tool's understanding through a set of tiny actions!
 
-## Understanding the Spring Petclinic application with a few diagrams
+## Getting started
+- [ ] Task: Use IntelliJ to create a new project based on this remove repository.
+- [ ] How to: 
+    - [ ] Open up IntelliJ
+    - [ ] Under File choose New > Project from Version Control
+    - [ ] Under URL paste in https://github.com/lelexy100/spring-petclinic.git
+    - [ ] Under directory, choose a path where the project should be created
+    - Note that this method is helpful when the sources are not already present on your machine. If you've already downloaded the sources, you can make a new IntelliJ project by using File > New > Project from existing sources
+    - [ ] Clone & import as a maven project.
+    - [ ] Reload the Maven project to download dependencies by finding the Maven window on the right hand side of the screen & clicking the reload button.
 
-[See the presentation here](https://speakerdeck.com/michaelisvy/spring-petclinic-sample-application)
+## Context
+Welcome to PetClinic! This app can be used to keep track of doctors, pets, owners and appointments that pets have in the pet clinic!
 
-## Run Petclinic locally
+Today we'll be exploring some IntelliJ features while playing with this app's code!
 
-Spring Petclinic is a [Spring Boot](https://spring.io/guides/gs/spring-boot) application built using [Maven](https://spring.io/guides/gs/maven/) or [Gradle](https://spring.io/guides/gs/gradle/). You can build a jar file and run it from the command line (it should work just as well with Java 17 or newer):
+Note that while you will not need to launch the app for this workshop, you can do it, given you have JDK17 on your machine. You can find the class PetClinicApplication, launch it as a SpringBoot app and consult the app at http://localhost:8080 .
 
-```bash
-git clone https://github.com/spring-projects/spring-petclinic.git
-cd spring-petclinic
-./mvnw package
-java -jar target/*.jar
+## Let's go!
+As you're probably not familliar with this project, this guide will guide you towards finding different things we'd like to change, and tell you how to do it. If you already know how to do something, feel free to ignore the "How to:" section.
+
+* Task: Use Go to File to open up `PetController.java`
+  * How to: 
+    * Open the Go to File window by using the hotkey (IntelliJ: Ctrl+Shift+N, Eclipse: Ctrl+Shift+R)
+    * Type / Paste in `PetController.java`
+    * Double click the file in the list
+  * Info: The Go to File shortcut is very valuable in finding your way around a project. The tool allows for many parameters that can help in fine-graining your search for files.
+
+
+* Task: Locate the method `processCreationForm` in `PetController.java` and extract the validation into a new method
+  * How to:
+    * Use the search function (Ctrl+F) to locate `processCreationForm` inside `PetController.java`
+    * Make a selection with your cursor around the lines containing validation (lines 98 to 105)
+    * Right click on this selection, choose Refactor > Extract method... Alternatively, you can use the hotkey (IJ: Ctrl+Alt+M, E: Alt+Shift+M)
+    * Type / paste in the new name for this new function: `validateFormCreation`
+  * Info: Extracting methods is very common when developing, getting used to the hotkey will save you a lot of time!
+  * New task: Locate the method `processUpdateForm` in `PetController.java` and extract the validation into a new method `validateFormUpdate`.
+
+
+* Task: Locate the method `validateBirthDate` in `PetValidator.java` and inline + remove it.
+  * How to:
+    * Use Go to File to locate the file `PetValidator` and Search to locate `validateBirthDate` inside the file. 
+    * Right click on the method name (`validateBirthDate`) and choose Refactor > Inline method... Alternatively you may use the hotkey (IJ: Ctrl+Alt+N, E: Alt+Shift+I)
+    * In the popup, choose to inline and remove the function, then click Refactor.
+  * Info: Inlining methods is the reverse operation to extracting methods and can help easily get rid of some unneeded abstractions. 
+  * New task: Locate the method `validatePetType` in `PetValidator.java` and inline + remove it.
+
+
+* Task: Locate the method at line 122, column 25 in OwnerController and rename it to `findByLastname`
+* How to:
+  * Use Go to File to locate the file `OwnerController`
+  * Use the Go to Line:Column column through the hotkey (IJ: Ctrl+G, E: Ctrl+L) and type in 122:25
+  * Right click the method name, Refactor > Rename... or use the hotkey (IJ: Shift+F6, E: Alt+Shift+R) and type / paste `findByLastname`.
+* New task: Locate the method at line line 113, column 20 and rename it to `addPaginationToModel`.
+
+
+* Task: Extract a local variable named `totalPages` in the new `addPaginationToModel` method.
+* How to:
+  * In the `OwnerController` file, in the newly renamed method `addPaginationToModel`, identify the expression `paginated.getTotalPages()`
+  * Highlight the expression, right click it and Refactor > Introduce variable... or use the hotkey (IJ: Ctrl+Alt+V, E: Alt+Shift+L)
+  * Set the name to `totalPages` if not already suggested by IJ.
+* New task: Extract a local variable named `totalItems` in the new `addPaginationToModel` method.
+
+
+* Task: Extract the constant `pageSize` from `findByLastname` in `OwnerController`
+* How to: 
+  * In the `OwnerController` file, find the `findByLastname` method and locate the expression: `int pageSize = 5;`
+  * Highlight the expression, right click it and Refactor > Introduce constant... or use the hotkey (Ctrl+Alt+C)
+  * Name the new constant `PAGE_SIZE` and validate that it was properly used in the creation of the `Pageable`, one line lower.
+* New task: Extract the constant `pageSize` from `findPaginated` in `VetController`.
+
+
+* Task: Introduce a parameter from the `Pageable` object and remove useless parameters from the method `findByLastname` in `OwnerController`
+* How to:
+  * In the `OwnerController` file, find the `findByLastname` method and locate the expression: `Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE);`
+  * Highlight the expression, right click it and Refactor > Introduce parameter... or use the hotkey (Ctrl+Alt+P)
+  * Before confirming the new name for the parameter, check out the method signature: a new parameter is added in, `pageable` and a parameter that was previously received, `name` is strikedthrough.
+  * Confirm the new parameter `pageable` and notice that `name` has disappeared from the method signature.
+* Info: Because `name` is only used in the creation of `pageable` and `pageable` is transformed into a parameter, `name` is no longer needed, and IntelliJ recognizes that it should be removed.
+* New task: Introduce the parameters `owners` (from the local variable `listOwners`), `totalPages` and `totalItems` in the method `addPaginationToModel` of the file `OwnerController`.
+
+
+* Task: Reorder the parameters of the method `addPaginationModel` in the class `VetController` so that `page` is last.
+* How to: 
+  * Find the file `VetController` and the method `addPaginationModel`
+  * Right click on the `addPaginationModel` method name and Refactor > Change signature... or use the hotkey (IJ: Ctrl+F6, E: Alt+Shift+C)
+  * In the list of parameters, click the first one (`page`)
+  * Click on the arrow pointing down twice, so that `page` is now the last parameter.
+  * Click Refactor and notice how the parameter position changed in both the method signature and in places calling the method (right above the method declaration.)
+* Info: There are many other great features you can accomplish with Change signature..., feel free to explore some more after the workshop!
+* New task: Reorder the parameters of the method `showVetList` in the class `VetController` so that `page` is last. What do you notice about the annotation?
+
+
+* Task: Remove the useless parameter `model` of the function `triggerException` in `CrashController`
+* How to:
+  * Find the file `CrashController` and the method `triggerException`
+  * Notice how the parameter `model` is grayed out since it's unused in the method body.
+  * Right click the parameter and Refactor > Change signature... or use the hotkey (IJ: Ctrl+F6, E: Alt+Shift+C)
+  * Click the parameter in the list of parameters and then the `-` symbol
+  * Click Refactor and then Continue when asked for an unsafe delete.
+  * Notice how the parameter was removed in both the method implementation and the test in `CrashControllerTests.java`
+
+
+* Task: Find the method `getId` in the class `NamedEntity` using `File structure`
+* How to:
+  * Find the class `NamedEntity` and notice how it extends the class `BaseEntity`
+  * Open the `File structure` window by using the hotkey (IJ: Ctrl+F12, E: Ctrl+O)
+  * Type `getId` and notice how the method is found in the list of methods even though this method does not belong to the class NamedEntity
+  * Notice how the parameter `Inherited members` has turned on.
+* Info: The file structure search is one of the most powerful search mechanisms in IntelliJ - in complex inheritance hierarchies it will simplify navigating to the right superclass, in XML/JSON files it allows going straight to certain nodes, etc.
+
+
+* Task: Find all subclasses of `BaseEntity` using the Type Hierarchy
+* How to:
+  * Find the class `BaseEntity`, click its name and open the Type Hierarchy by using the hotkey (IJ: Ctrl+H, E: F4)
+  * Notice the new window opens and shows all the classes that extend the `BaseEntity`
+  * Uncollapse the collapsed classes in the window and notice that even anonymous implementations are shown!
+
+
+* Task: Create a new class called `PetCreationValidator`, declare it as a `private final field` of `PetController` and inject it in its constructor.
+* How to:
+  * In the Project View (Alt+1) Go to the package that contains the `PetController` class and right click its parent folder then create a new class `PetCreationValidator` next to `PetController`.
+  * Annotate the newly created class with `@Component`
+  * In the `PetController` class, create a new `private final PetCreationValidator petCreationValidator;`
+  * Notice an error is shown because the validator is declared as final but never initialized.
+  * Use the Show Quick Fixes command, hotkey (Alt+Enter) and choose Add constructor parameter.
+  * Notice how the additional parameter is added to the constructor and the validator is now injected.
+
+
+* Task: Move the method `validateFormCreation` into the new `PetCreationValidator` and rename it to `validate`
+* How to:
+  * In the `PetController` class, find the method `validateFormCreation` and make sure the method is NOT static. If it is, remove the static keyword.
+  * Right click the method name and choose Refactor > Move Instance Method... or use the hotkey (IJ: F6, E: Alt+Shift+V)
+  * A new window showing the possible instances where the method can be moved will show up. Choose `PetCreationValidator`.
+  * Ensure the new visibility is set to `public` on the right hand side of the window, then click Refactor.
+  * Go to `PetCreationValidator` and notice that the method has been moved.
+  * Rename the method `validateFormCreation` into `validate`.
+* Info: when moving the method to a different instance, the window allows setting up different visibilities for the newly moved method. Most notably, `Escalate` will set the visibility to the most restrictive one that still allows using the method from the new class parent. In our case, we went for `public` since we'll move this class to a different package eventually.
+
+
+* Task: Extract the method `validateFormUpdate` into a superclass of `PetController`
+* How to:
+  * In the `PetController` class, find the method `validateFormUpdate` and make sure the method is NOT static. if it is, remove the static keyword.
+  * Right click the `PetController` class name and choose Refactor > Extract Superclass...
+  * In the new window, in the `Superclass name` field, type / paste in `PetControllerTemp`.
+  * In the list of methods implemented in the class, choose the method `validateFormUpdate` and click Refactor.
+  * In the window asking to Find and replace usages, click `No`. If a window appears asking to add the file to VCS, you can click either `yes` or `no`.
+  * In the `PetController` class, notice how the class now extends our newly created class.
+  * In the `PetControllerTemp` class, notice how the method has been moved. If the method is not `public`, make it `public` since we'll need that in a future step.
+* Info: extracting a superclass can be very useful on its own whenever we need to create a new abstraction but even more so when coupled with replacing inheritance with composition.
+
+
+* Task: Replace `PetController`'s inheritance with composition and rename the new member to `PetUpdateValidator`
+* How to:
+  * In the `PetController` class, right click on the class name and choose Refactor > Replace inheritance with delegation...
+  * In the new refactor window, choose the name of the field for the new resource as `petControllerTemp` and make sure that there are no delegate members selected. Having them selected introduces an additional wrapper method that we don't need.
+  * Click Refactor and notice how now the inheritance has disappeared, and in its place, we have a new field.
+  * The new field is created statically which we don't want, we'll inject it through the constructor.
+  * In the `PetControllerTemp` class, annotate the class with `@Component`.
+  * In the `PetController` class, you may now remove the instantiation of the `PetControllerTemp` by replacing:
+```java
+private final PetControllerTemp petControllerTemp = new PetControllerTemp();
 ```
-
-You can then access the Petclinic at <http://localhost:8080/>.
-
-<img width="1042" alt="petclinic-screenshot" src="https://cloud.githubusercontent.com/assets/838318/19727082/2aee6d6c-9b8e-11e6-81fe-e889a5ddfded.png">
-
-Or you can run it from Maven directly using the Spring Boot Maven plugin. If you do this, it will pick up changes that you make in the project immediately (changes to Java source files require a compile as well - most people use an IDE for this):
-
-```bash
-./mvnw spring-boot:run
+with
+```java
+private final PetControllerTemp petControllerTemp;
 ```
+* 
+  * You will now have an error that you can fix by injecting this new dependency in the constructor, as done in a previous example.
+  * Rename the class `PetControllerTemp` into `PetUpdateValidator` by going in the class `PetControllerTemp`, right clicking the class' name and choosing Refactor > Rename...
+  * In the refacto window, click `Select All` to choose to replace all members having the old name, with the new one. Click Ok.
+  * In the Rename confirmation window, find the category `[In Strings, Comments, and Text]`, uncolapse it and right click > Exclude the file `readme.md` from the replace - otherwise you will break this readme :).
+  * Click `Do Refactor` and notice how now the class is named PetUpdateValidator, the field where the validator is references is also renamed.
+  * Finally, rename the method `validateFormUpdate` from `PetUpdateValidator` into `validate`.
 
-> NOTE: If you prefer to use Gradle, you can build the app using `./gradlew build` and look for the jar file in `build/libs`.
 
-## Building a Container
+* Task: Make a new package for validators and move them there.
+* How to:
+  * In the Project View (Alt+1), create a new package in the same package that contains `PetController`, by right clicking the `owner` folder and choosing New > Package
+  * The full package name should be `org.springframework.samples.petclinic.owner.validator` which is just adding `validator` at the end of the previous package.
+  * In the Project View, choose both newly created validators, by clicking `PetUpdateValidator` and then holding down Ctrl before clicking `PetCreationValidator`.
+  * Having the 2 selected, right click one of them and choose Refactor > Move class...
+  * In the new window, paste in the newly created package `org.springframework.samples.petclinic.owner.validator` and click Refactor.
+  * If you get a new window showing conflicts, you probably haven't made one of the 2 `validate` methods public in one of the previous steps.
 
-There is no `Dockerfile` in this project. You can build a container image (if you have a docker daemon) using the Spring Boot build plugin:
 
-```bash
-./mvnw spring-boot:build-image
-```
+* Task: That's all! Let me know your thoughts on this workshop and fill in the feedback form I'll be sending later today / tomorrow :D
 
-## In case you find a bug/suggested improvement for Spring Petclinic
-
-Our issue tracker is available [here](https://github.com/spring-projects/spring-petclinic/issues).
-
-## Database configuration
-
-In its default configuration, Petclinic uses an in-memory database (H2) which
-gets populated at startup with data. The h2 console is exposed at `http://localhost:8080/h2-console`,
-and it is possible to inspect the content of the database using the `jdbc:h2:mem:<uuid>` URL. The UUID is printed at startup to the console.
-
-A similar setup is provided for MySQL and PostgreSQL if a persistent database configuration is needed. Note that whenever the database type changes, the app needs to run with a different profile: `spring.profiles.active=mysql` for MySQL or `spring.profiles.active=postgres` for PostgreSQL.
-
-You can start MySQL or PostgreSQL locally with whatever installer works for your OS or use docker:
-
-```bash
-docker run -e MYSQL_USER=petclinic -e MYSQL_PASSWORD=petclinic -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=petclinic -p 3306:3306 mysql:8.2
-```
-
-or
-
-```bash
-docker run -e POSTGRES_USER=petclinic -e POSTGRES_PASSWORD=petclinic -e POSTGRES_DB=petclinic -p 5432:5432 postgres:16.1
-```
-
-Further documentation is provided for [MySQL](https://github.com/spring-projects/spring-petclinic/blob/main/src/main/resources/db/mysql/petclinic_db_setup_mysql.txt)
-and [PostgreSQL](https://github.com/spring-projects/spring-petclinic/blob/main/src/main/resources/db/postgres/petclinic_db_setup_postgres.txt).
-
-Instead of vanilla `docker` you can also use the provided `docker-compose.yml` file to start the database containers. Each one has a profile just like the Spring profile:
-
-```bash
-docker-compose --profile mysql up
-```
-
-or
-
-```bash
-docker-compose --profile postgres up
-```
-
-## Test Applications
-
-At development time we recommend you use the test applications set up as `main()` methods in `PetClinicIntegrationTests` (using the default H2 database and also adding Spring Boot Devtools), `MySqlTestApplication` and `PostgresIntegrationTests`. These are set up so that you can run the apps in your IDE to get fast feedback and also run the same classes as integration tests against the respective database. The MySql integration tests use Testcontainers to start the database in a Docker container, and the Postgres tests use Docker Compose to do the same thing.
-
-## Compiling the CSS
-
-There is a `petclinic.css` in `src/main/resources/static/resources/css`. It was generated from the `petclinic.scss` source, combined with the [Bootstrap](https://getbootstrap.com/) library. If you make changes to the `scss`, or upgrade Bootstrap, you will need to re-compile the CSS resources using the Maven profile "css", i.e. `./mvnw package -P css`. There is no build profile for Gradle to compile the CSS.
-
-## Working with Petclinic in your IDE
-
-### Prerequisites
-
-The following items should be installed in your system:
-
-- Java 17 or newer (full JDK, not a JRE)
-- [Git command line tool](https://help.github.com/articles/set-up-git)
-- Your preferred IDE
-  - Eclipse with the m2e plugin. Note: when m2e is available, there is an m2 icon in `Help -> About` dialog. If m2e is
-  not there, follow the install process [here](https://www.eclipse.org/m2e/)
-  - [Spring Tools Suite](https://spring.io/tools) (STS)
-  - [IntelliJ IDEA](https://www.jetbrains.com/idea/)
-  - [VS Code](https://code.visualstudio.com)
-
-### Steps
-
-1. On the command line run:
-
-    ```bash
-    git clone https://github.com/spring-projects/spring-petclinic.git
-    ```
-
-1. Inside Eclipse or STS:
-
-    Open the project via `File -> Import -> Maven -> Existing Maven project`, then select the root directory of the cloned repo.
-
-    Then either build on the command line `./mvnw generate-resources` or use the Eclipse launcher (right-click on project and `Run As -> Maven install`) to generate the CSS. Run the application's main method by right-clicking on it and choosing `Run As -> Java Application`.
-
-1. Inside IntelliJ IDEA:
-
-    In the main menu, choose `File -> Open` and select the Petclinic [pom.xml](pom.xml). Click on the `Open` button.
-
-    - CSS files are generated from the Maven build. You can build them on the command line `./mvnw generate-resources` or right-click on the `spring-petclinic` project then `Maven -> Generates sources and Update Folders`.
-
-    - A run configuration named `PetClinicApplication` should have been created for you if you're using a recent Ultimate version. Otherwise, run the application by right-clicking on the `PetClinicApplication` main class and choosing `Run 'PetClinicApplication'`.
-
-1. Navigate to the Petclinic
-
-    Visit [http://localhost:8080](http://localhost:8080) in your browser.
-
-## Looking for something in particular?
-
-|Spring Boot Configuration | Class or Java property files  |
-|--------------------------|---|
-|The Main Class | [PetClinicApplication](https://github.com/spring-projects/spring-petclinic/blob/main/src/main/java/org/springframework/samples/petclinic/PetClinicApplication.java) |
-|Properties Files | [application.properties](https://github.com/spring-projects/spring-petclinic/blob/main/src/main/resources) |
-|Caching | [CacheConfiguration](https://github.com/spring-projects/spring-petclinic/blob/main/src/main/java/org/springframework/samples/petclinic/system/CacheConfiguration.java) |
-
-## Interesting Spring Petclinic branches and forks
-
-The Spring Petclinic "main" branch in the [spring-projects](https://github.com/spring-projects/spring-petclinic)
-GitHub org is the "canonical" implementation based on Spring Boot and Thymeleaf. There are
-[quite a few forks](https://spring-petclinic.github.io/docs/forks.html) in the GitHub org
-[spring-petclinic](https://github.com/spring-petclinic). If you are interested in using a different technology stack to implement the Pet Clinic, please join the community there.
-
-## Interaction with other open-source projects
-
-One of the best parts about working on the Spring Petclinic application is that we have the opportunity to work in direct contact with many Open Source projects. We found bugs/suggested improvements on various topics such as Spring, Spring Data, Bean Validation and even Eclipse! In many cases, they've been fixed/implemented in just a few days.
-Here is a list of them:
-
-| Name | Issue |
-|------|-------|
-| Spring JDBC: simplify usage of NamedParameterJdbcTemplate | [SPR-10256](https://jira.springsource.org/browse/SPR-10256) and [SPR-10257](https://jira.springsource.org/browse/SPR-10257) |
-| Bean Validation / Hibernate Validator: simplify Maven dependencies and backward compatibility |[HV-790](https://hibernate.atlassian.net/browse/HV-790) and [HV-792](https://hibernate.atlassian.net/browse/HV-792) |
-| Spring Data: provide more flexibility when working with JPQL queries | [DATAJPA-292](https://jira.springsource.org/browse/DATAJPA-292) |
-
-## Contributing
-
-The [issue tracker](https://github.com/spring-projects/spring-petclinic/issues) is the preferred channel for bug reports, feature requests and submitting pull requests.
-
-For pull requests, editor preferences are available in the [editor config](.editorconfig) for easy use in common text editors. Read more and download plugins at <https://editorconfig.org>. If you have not previously done so, please fill out and submit the [Contributor License Agreement](https://cla.pivotal.io/sign/spring).
-
-## License
-
-The Spring PetClinic sample application is released under version 2.0 of the [Apache License](https://www.apache.org/licenses/LICENSE-2.0).
