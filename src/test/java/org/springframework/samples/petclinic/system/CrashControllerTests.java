@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.ui.ModelMap;
 
 /**
  * Test class for {@link CrashController}
@@ -36,7 +37,7 @@ class CrashControllerTests {
 	@Test
 	void testTriggerException() throws Exception {
 		RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
-			testee.triggerException();
+			testee.triggerException(new ModelMap());
 		});
 
 		assertEquals("Expected: controller used to showcase what happens when an exception is thrown",
