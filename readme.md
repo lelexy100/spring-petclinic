@@ -79,9 +79,9 @@ As you're probably not familliar with this project, this guide will guide you to
 * How to:
   * In the `OwnerController` file, find the `findByLastname` method and locate the expression: `Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE);`
   * Highlight the expression, right click it and Refactor > Introduce parameter... or use the hotkey (Ctrl+Alt+P)
-  * Before confirming the new name for the parameter, check out the method signature: a new parameter is added in, `pageable` and a parameter that was previously received, `name` is strikedthrough.
-  * Confirm the new parameter `pageable` and notice that `name` has disappeared from the method signature.
-* Info: Because `name` is only used in the creation of `pageable` and `pageable` is transformed into a parameter, `name` is no longer needed, and IntelliJ recognizes that it should be removed.
+  * Before confirming the new name for the parameter, check out the method signature: a new parameter is added in, `pageable` and a parameter that was previously received, `page` is strikedthrough.
+  * Confirm the new parameter `pageable` and notice that `page` has disappeared from the method signature.
+* Info: Because `page` is only used in the creation of `pageable` and `pageable` is transformed into a parameter, `page` is no longer needed, and IntelliJ recognizes that it should be removed.
 * New task: Introduce the parameters `owners` (from the local variable `listOwners`), `totalPages` and `totalItems` in the method `addPaginationToModel` of the file `OwnerController`.
 
 
